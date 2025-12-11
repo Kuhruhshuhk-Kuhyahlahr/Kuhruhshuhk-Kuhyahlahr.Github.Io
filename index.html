@@ -7,6 +7,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <title>Karışık-Kayalar</title>
+	<script>
+let startY = 0; // The starting Y-position of the touch
+let dist = 0;   // The vertical distance dragged
+const threshold = 100; // Minimum drag distance (in pixels) to trigger refresh
+
+// 1. Record the starting position on touchstart
+document.addEventListener('touchstart', function(e) {
+    // Only track the first touch point
+    startY = e.changedTouches[0].clientY; 
+    dist = 0; // Reset distance
+}, false);
+
+// 2. Calculate the distance on touchmove
+document.addEventListener('touchmove', function(e) {
+    // Check if the page is at the very top (optional but good practice)
+    if (window.scrollY === 0) { 
+        let currentY = e.changedTouches[0].clientY;
+        dist = currentY - startY; // Swipe-down results in a positive distance
+
+        // Prevent the browser's native pull-to-refresh if we've started a drag
+        if (dist > 0) {
+            e.preventDefault(); 
+            // In a real implementation, you would update a visual indicator here
+        }
+    }
+}, { passive: false }); // { passive: false } is often needed to call preventDefault
+
+// 3. Check the threshold and refresh on touchend
+document.addEventListener('touchend', function(e) {
+    if (dist > threshold) {
+        // --- This is where the refresh/update happens ---
+        console.log('Refreshing content...');
+        // For a full page reload:
+        location.reload(); 
+        
+        // For an AJAX update:
+        // loadNewContent(); 
+        // ------------------------------------------------
+    }
+    // If you had a visual indicator, you'd hide/reset it here
+    dist = 0;
+}, false);
+
+		
+	</script>
     <style>
 		/*@media screen and (max-width: 614px) {
 	 .w3-margin-bottom {
