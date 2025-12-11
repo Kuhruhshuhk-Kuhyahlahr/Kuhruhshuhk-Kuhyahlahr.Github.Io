@@ -7,50 +7,104 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <title>Karışık-Kayalar</title>
-	<script>
-let startY = 0; // The starting Y-position of the touch
-let dist = 0;   // The vertical distance dragged
-const threshold = 100; // Minimum drag distance (in pixels) to trigger refresh
-
-// 1. Record the starting position on touchstart
-document.addEventListener('touchstart', function(e) {
-    // Only track the first touch point
-    startY = e.changedTouches[0].clientY; 
-    dist = 0; // Reset distance
-}, false);
-
-// 2. Calculate the distance on touchmove
-document.addEventListener('touchmove', function(e) {
-    // Check if the page is at the very top (optional but good practice)
-    if (window.scrollY === 0) { 
-        let currentY = e.changedTouches[0].clientY;
-        dist = currentY - startY; // Swipe-down results in a positive distance
-
-        // Prevent the browser's native pull-to-refresh if we've started a drag
-        if (dist > 0) {
-            e.preventDefault(); 
-            // In a real implementation, you would update a visual indicator here
+	<script>// Basic pull-to-refresh for swipe-up page
+class PullToRefresh {
+    constructor(container) {
+        this.container = container;
+        this.startY = 0;
+        this.currentY = 0;
+        this.refreshThreshold = 100;
+        this.isRefreshing = false;
+        
+        this.init();
+    }
+    
+    init() {
+        this.container.addEventListener('touchstart', this.onTouchStart.bind(this));
+        this.container.addEventListener('touchmove', this.onTouchMove.bind(this));
+        this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
+        
+        // Create refresh indicator
+        this.refreshIndicator = document.createElement('div');
+        this.refreshIndicator.className = 'refresh-indicator';
+        this.refreshIndicator.innerHTML = '↓ Pull to refresh';
+        this.container.prepend(this.refreshIndicator);
+    }
+    
+    onTouchStart(e) {
+        if (this.container.scrollTop === 0 && !this.isRefreshing) {
+            this.startY = e.touches[0].clientY;
         }
     }
-}, { passive: false }); // { passive: false } is often needed to call preventDefault
-
-// 3. Check the threshold and refresh on touchend
-document.addEventListener('touchend', function(e) {
-    if (dist > threshold) {
-        // --- This is where the refresh/update happens ---
-        console.log('Refreshing content...');
-        // For a full page reload:
-        location.reload(); 
-        
-        // For an AJAX update:
-        // loadNewContent(); 
-        // ------------------------------------------------
+    
+    onTouchMove(e) {
+        if (this.startY && !this.isRefreshing) {
+            this.currentY = e.touches[0].clientY;
+            const distance = this.currentY - this.startY;
+            
+            if (distance > 0) {
+                e.preventDefault();
+                this.updateRefreshIndicator(distance);
+            }
+        }
     }
-    // If you had a visual indicator, you'd hide/reset it here
-    dist = 0;
-}, false);
+    
+    onTouchEnd() {
+        if (this.startY && !this.isRefreshing) {
+            const distance = this.currentY - this.startY;
+            
+            if (distance > this.refreshThreshold) {
+                this.triggerRefresh();
+            } else {
+                this.reset();
+            }
+        }
+        this.startY = 0;
+    }
+    
+    updateRefreshIndicator(distance) {
+        const progress = Math.min(distance / this.refreshThreshold, 1);
+        this.refreshIndicator.style.transform = `translateY(${distance}px)`;
+        this.refreshIndicator.style.opacity = progress;
+        
+        if (distance > this.refreshThreshold) {
+            this.refreshIndicator.innerHTML = '↑ Release to refresh';
+        } else {
+            this.refreshIndicator.innerHTML = '↓ Pull to refresh';
+        }
+    }
+    
+    async triggerRefresh() {
+        this.isRefreshing = true;
+        this.refreshIndicator.innerHTML = '⟳ Refreshing...';
+        
+        // Call your refresh function
+        await this.refreshContent();
+        
+        this.reset();
+    }
+    
+    async refreshContent() {
+        // Your refresh logic here
+        console.log('Refreshing content...');
+        
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Update your content here
+        // this.updateData();
+    }
+    
+    reset() {
+        this.isRefreshing = false;
+        this.refreshIndicator.style.transform = 'translateY(0)';
+        this.refreshIndicator.style.opacity = '0';
+    }
+}
 
-		
+// Usage
+const contentContainer = document.querySelector('.content-container');
+new PullToRefresh(contentContainer);
 	</script>
     <style>
 		/*@media screen and (max-width: 614px) {
