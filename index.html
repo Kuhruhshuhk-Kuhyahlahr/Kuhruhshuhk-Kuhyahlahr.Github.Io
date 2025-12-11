@@ -8,103 +8,21 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <title>Karışık-Kayalar</title>
 	<script>// Basic pull-to-refresh for swipe-up page
-class PullToRefresh {
-    constructor(container) {
-        this.container = container;
-        this.startY = 0;
-        this.currentY = 0;
-        this.refreshThreshold = 100;
-        this.isRefreshing = false;
-        
-        this.init();
-    }
-    
-    init() {
-        this.container.addEventListener('touchstart', this.onTouchStart.bind(this));
-        this.container.addEventListener('touchmove', this.onTouchMove.bind(this));
-        this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
-        
-        // Create refresh indicator
-        this.refreshIndicator = document.createElement('div');
-        this.refreshIndicator.className = 'refresh-indicator';
-        this.refreshIndicator.innerHTML = '↓ Pull to refresh';
-        this.container.prepend(this.refreshIndicator);
-    }
-    
-    onTouchStart(e) {
-        if (this.container.scrollTop === 0 && !this.isRefreshing) {
-            this.startY = e.touches[0].clientY;
-        }
-    }
-    
-    onTouchMove(e) {
-        if (this.startY && !this.isRefreshing) {
-            this.currentY = e.touches[0].clientY;
-            const distance = this.currentY - this.startY;
-            
-            if (distance > 0) {
-                e.preventDefault();
-                this.updateRefreshIndicator(distance);
-            }
-        }
-    }
-    
-    onTouchEnd() {
-        if (this.startY && !this.isRefreshing) {
-            const distance = this.currentY - this.startY;
-            
-            if (distance > this.refreshThreshold) {
-                this.triggerRefresh();
-            } else {
-                this.reset();
-            }
-        }
-        this.startY = 0;
-    }
-    
-    updateRefreshIndicator(distance) {
-        const progress = Math.min(distance / this.refreshThreshold, 1);
-        this.refreshIndicator.style.transform = `translateY(${distance}px)`;
-        this.refreshIndicator.style.opacity = progress;
-        
-        if (distance > this.refreshThreshold) {
-            this.refreshIndicator.innerHTML = '↑ Release to refresh';
-        } else {
-            this.refreshIndicator.innerHTML = '↓ Pull to refresh';
-        }
-    }
-    
-    async triggerRefresh() {
-        this.isRefreshing = true;
-        this.refreshIndicator.innerHTML = '⟳ Refreshing...';
-        
-        // Call your refresh function
-        await this.refreshContent();
-        
-        this.reset();
-    }
-    
-    async refreshContent() {
-        // Your refresh logic here
-        console.log('Refreshing content...');
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Update your content here
-        // this.updateData();
-    }
-    
-    reset() {
-        this.isRefreshing = false;
-        this.refreshIndicator.style.transform = 'translateY(0)';
-        this.refreshIndicator.style.opacity = '0';
-    }
-}
+// Set the refresh interval to 10 seconds (10000 milliseconds)
+const refreshInterval = 10000; 
 
-// Usage
-const contentContainer = document.querySelector('.content-container');
-new PullToRefresh(contentContainer);
+// Start the timer
+const intervalId = setInterval(function() {
+    // Reload the current page
+    location.reload(); 
+    
+    // The browser will reload the page every 10 seconds until it is closed.
+    // If you ever needed to stop the refresh (on a different page interaction), 
+    // you would call clearInterval(intervalId);
+}, refreshInterval);
+
+console.log(`Page refresh scheduled every ${refreshInterval / 1000} seconds.`);
+		
 	</script>
     <style>
 		/*@media screen and (max-width: 614px) {
