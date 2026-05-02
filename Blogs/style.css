@@ -5,23 +5,19 @@
 	  
 		}
      }*/
-        body {
+         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-			color: #333;
+            color: #333;
             background-color: #fff;
-            /* color: #fff;
-			background: #FE191D;
-			background: linear-gradient(90deg, rgba(254, 25, 29, 1) 20%, rgba(237, 237, 237, 0.51) 50%, rgba(254, 25, 29, 1) 80%);    */
         }
 
         header {
-		 color: #ff0000 !important;
-         background-color: #fff !important;
-           background: #ff0000;
-		   padding: 2rem 1rem;
-		   text-align: center;
+            background: #ff0000;
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
         }
 
         header h1 {
@@ -29,34 +25,31 @@
             margin: 0;
         }
 
-		
-
         header p {
             margin: 0.5rem 0 0;
             font-size: 1.2rem;
         }
 
         nav {
-          background: #fff;
-		  color: #f00;
-		  padding: 0.8rem;
-		  display: flex;
-		  justify-content: center;
-		  border-bottom: 2px solid #ff0000;
+            background: #fff;
+            color: #ff0000;
+            padding: 0.8rem;
+            display: flex;
+            justify-content: center;
+            border-bottom: 2px solid #ff0000;
         }
 
         nav a {
-			
-           		  color: #f00;
-			  text-decoration: none;
-			  margin: 0 15px;
-			  font-size: 1rem;
-			  font-weight: bold;
-			  transition: color 0.3s;
+            color: #ff0000;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
         }
 
         nav a:hover {
-            text-shadow: 1px 1px 1px;
+            color: #cc0000;
         }
 
         .container {
@@ -72,10 +65,9 @@
         section h2 {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: #ff0000;
             border-bottom: 2px solid #ff0000;
             padding-bottom: 0.5rem;
-					  color: #f00;
-			text-align: center;
         }
 
         .blog-card {
@@ -88,7 +80,6 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             transition: transform 0.3s, box-shadow 0.3s;
-			text-align:center;
         }
 
         .blog-card:hover {
@@ -107,10 +98,9 @@
             color: #555;
         }
 
-       
         footer {
-        	background: #fff;
-		    color: #f00;
+            background: #ff0000;
+            color: #fff;
             text-align: center;
             padding: 1rem 0;
             margin-top: 2rem;
@@ -118,7 +108,7 @@
 
         footer p {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
         }
 
         a {
@@ -129,6 +119,3 @@
         a:hover {
             text-decoration: underline;
         }
-		.w3-text-black, .w3-hover-text-black:hover {
-		color: #fff !important;
-		}
